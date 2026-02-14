@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مستر محمد عاطف - شركة التميز التعليمية</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- React & Babel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
+        .emerald-gradient { background: radial-gradient(circle at top right, #f0fdf4 0%, #ffffff 100%); }
+        input, select { border-bottom: 2px solid #e5e7eb !important; border-top: 0 !important; border-left: 0 !important; border-right: 0 !important; border-radius: 0 !important; }
+        input:focus, select:focus { border-bottom-color: #059669 !important; outline: none !important; box-shadow: none !important; }
+        .honor-card { background: rgba(6, 78, 59, 0.05); border: 1px solid rgba(5, 150, 105, 0.1); }
+        .animate-slide { animation: slide 0.5s ease-out; }
+        @keyframes slide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .social-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .social-btn:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="bg-white text-emerald-950">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, Fragment } = React;
+        
+        const Icon = ({ name, size = 24, className = "" }) => {
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            }, [name]);
+            return <i data-lucide={name} className={className} style={{ width: size, height: size }}></i>;
+        };
+
+        const App = () => {
+            const [scrolled, setScrolled] = useState(false);
+            const [currentPage, setCurrentPage] = useState('home'); // 'home' or 'auth'
+            const [authTab, setAuthTab] = useState('login');
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            useEffect(() => {
+                window.scrollTo(0, 0);
+            }, [currentPage]);
+
+            const features = [
+                { title: "شرح مبسط", icon: "zap", desc: "تحويل القواعد المعقدة إلى معادلات سهلة الفهم." },
+                { title: "منهج الأزهر", icon: "book-marked", desc: "تغطية كاملة وشاملة لمنهج الأزهر الشريف." },
+                { title: "متابعة دورية", icon: "users", desc: "تقارير أداء دورية لولي الأمر لمتابعة مستوى الطالب." },
+                { title: "اختبارات ذكية", icon: "brain-circuit", desc: "اختبارات إلكترونية تحاكي نظام الامتحانات الجديد." }
+            ];
+
+            if (currentPage === 'auth') {
+                return (
+                    <div className="min-h-screen bg-emerald-50 flex flex-col items-center justify-center p-6 animate-slide">
+                        <button onClick={() => setCurrentPage('home')} className="fixed top-8 right-8 z-50 flex items-center gap-2 bg-white/80 backdrop-blur px-6 py-3 rounded-full text-emerald-900 font-black hover:bg-emerald-900 hover:text-white transition-all shadow-lg">
+                            <Icon name="arrow-right" size={20} /> العودة للموقع
+                        </button>
+                        
+                        <div className="w-full max-w-2xl bg-white rounded-[50px] shadow-2xl overflow-hidden border border-emerald-100 my-12">
+                            <div className="bg-emerald-900 p-10 text-center text-white relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <h2 className="text-3xl font-black mb-2">{authTab === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب طالب'}</h2>
+                                    <p className="text-emerald-300 font-bold italic">مرحباً بك في شركة التميز التعليمية</p>
+                                </div>
+                                <div className="absolute top-0 left-0 w-full h-full opacity-10">
+                                    <Icon name="shield-check" size={200} className="absolute -bottom-10 -right-10" />
+                                </div>
+                            </div>
+                            
+                            <div className="p-8 md:p-12">
+                                <div className="flex bg-emerald-50 p-2 rounded-2xl mb-10">
+                                    <button onClick={() => setAuthTab('login')} className={`flex-1 py-3 rounded-xl font-black transition-all ${authTab === 'login' ? 'bg-emerald-600 text-white shadow-md' : 'text-emerald-800'}`}>دخول</button>
+                                    <button onClick={() => setAuthTab('register')} className={`flex-1 py-3 rounded-xl font-black transition-all ${authTab === 'register' ? 'bg-emerald-600 text-white shadow-md' : 'text-emerald-800'}`}>تسجيل جديد</button>
+                                </div>
+
+                                <form className="space-y-6">
+                                    {authTab === 'login' ? (
+                                        <Fragment>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-black text-emerald-900 px-1">رقم الهاتف</label>
+                                                <input type="text" className="w-full p-3 font-bold" placeholder="01xxxxxxxxx" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-black text-emerald-900 px-1">كلمة السر</label>
+                                                <input type="password" className="w-full p-3 font-bold" placeholder="••••••••" />
+                                            </div>
+                                        </Fragment>
+                                    ) : (
+                                        <div className="grid md:grid-cols-2 gap-6">
+                                            <input type="text" placeholder="الاسم الأول" className="p-3 font-bold" />
+                                            <input type="text" placeholder="اسم الوالد" className="p-3 font-bold" />
+                                            <input type="text" placeholder="رقم هاتفك" className="p-3 font-bold" />
+                                            <input type="text" placeholder="رقم ولي الأمر" className="p-3 font-bold" />
+                                            <select className="p-3 font-bold bg-transparent">
+                                                <option>الصف الدراسي</option>
+                                                <option>الأول الثانوي</option>
+                                                <option>الثاني الثانوي</option>
+                                                <option>الثالث الثانوي</option>
+                                            </select>
+                                            <select className="p-3 font-bold bg-transparent">
+                                                <option>المحافظة</option>
+                                                <option>القاهرة</option>
+                                                <option>الجيزة</option>
+                                            </select>
+                                            <input type="text" placeholder="المدرسة" className="p-3 font-bold md:col-span-2" />
+                                            <input type="password" placeholder="كلمة سر جديدة" className="p-3 font-bold md:col-span-2" />
+                                        </div>
+                                    )}
+                                    <button type="button" className="w-full bg-emerald-900 text-white py-5 rounded-2xl font-black text-xl hover:bg-emerald-700 transition-all shadow-xl mt-4">
+                                        {authTab === 'login' ? 'دخول الحساب' : 'تأكيد التسجيل'}
+                                    </button>
+                                </form>
+
+                                <div className="mt-12 pt-8 border-t border-emerald-50 text-center">
+                                    <p className="text-sm font-bold text-emerald-800 mb-6">تواجه مشكلة في التسجيل؟ تواصل مع الدعم الفني عبر التليجرام:</p>
+                                    <div className="flex flex-wrap gap-4 justify-center">
+                                        <a href="https://t.me/MOHAMEDATEF2022" target="_blank" className="flex items-center justify-center gap-3 bg-sky-600 text-white px-10 py-4 rounded-2xl font-black hover:bg-sky-700 transition-all shadow-lg w-full md:w-auto">
+                                            <Icon name="send" size={20} /> تواصل عبر تليجرام
+                                        </a>
+                                        <a href="tel:01010056086" className="flex items-center justify-center gap-2 text-emerald-700 px-6 py-4 rounded-2xl font-black border border-emerald-100 hover:bg-emerald-50 transition-all w-full md:w-auto">
+                                            <Icon name="phone-call" size={18} /> اتصال هاتفي
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen">
+                    {/* Navigation */}
+                    <nav className={`fixed w-full z-50 transition-all duration-500 py-4 px-6 ${scrolled ? 'top-2' : 'top-0'}`}>
+                        <div className={`container mx-auto flex justify-between items-center transition-all duration-500 ${scrolled ? 'bg-emerald-900 text-white py-3 px-8 rounded-full shadow-2xl' : 'bg-white/80 backdrop-blur-md py-4 px-8 rounded-3xl border border-emerald-50'}`}>
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-black">MA</div>
+                                <div className="flex flex-col">
+                                    <span className="text-lg font-black leading-none">مستر محمد عاطف</span>
+                                    <span className="text-[10px] text-emerald-500 font-bold uppercase tracking-widest">Model of Excellence</span>
+                                </div>
+                            </div>
+                            <div className="hidden lg:flex items-center gap-8 font-bold text-sm">
+                                <a href="#features" className="hover:text-emerald-500 transition-colors">المميزات</a>
+                                <a href="#cv" className="hover:text-emerald-500 transition-colors">السيرة الذاتية</a>
+                                <a href="#honors" className="hover:text-emerald-500 transition-colors">لوحة الشرف</a>
+                                <a href="https://t.me/MOHAMEDATEF2022" target="_blank" className="text-emerald-600 flex items-center gap-1 font-black"><Icon name="send" size={16}/> قناة المستر</a>
+                                <a href="http://www.youtube.com/@mohammedattee" target="_blank" className="text-red-600 flex items-center gap-1 font-black"><Icon name="youtube" size={16}/> يوتيوب</a>
+                            </div>
+                            <button onClick={() => { setCurrentPage('auth'); setAuthTab('login'); }} className={`px-8 py-2 rounded-full text-xs font-black transition-all ${scrolled ? 'bg-white text-emerald-900' : 'bg-emerald-900 text-white'}`}>دخول / تسجيل</button>
+                        </div>
+                    </nav>
+
+                    {/* Hero Section */}
+                    <section className="relative pt-48 pb-20 lg:pt-60 lg:pb-32 emerald-gradient">
+                        <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+                            <div className="space-y-8">
+                                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-5 py-2 rounded-full text-xs font-black">
+                                   <Icon name="award" size={14} /> شركة التميز التعليمية المعتمدة
+                                </div>
+                                <h1 className="text-5xl lg:text-7xl font-black leading-tight text-emerald-950">
+                                    اتقن <span className="text-emerald-600">اللغة</span> <br />بأبسط <span className="underline decoration-emerald-300 decoration-8">الأساليب</span>
+                                </h1>
+                                <p className="text-lg text-emerald-700/70 font-bold leading-relaxed max-w-lg italic">
+                                    "رحلتك نحو التميز تبدأ هنا، مع أقوى نموذج تعليمي متخصص في المنهج الأزهري."
+                                </p>
+                                <div className="flex flex-wrap gap-4">
+                                    <button onClick={() => { setCurrentPage('auth'); setAuthTab('login'); }} className="bg-emerald-900 text-white px-10 py-5 rounded-2xl font-black text-lg hover:bg-emerald-700 transition-all shadow-xl flex items-center gap-3">
+                                        تسجيل الدخول <Icon name="log-in" size={20} />
+                                    </button>
+                                    <a href="https://t.me/MOHAMEDATEF2022" target="_blank" className="bg-white border-2 border-emerald-900 text-emerald-900 px-10 py-5 rounded-2xl font-black text-lg hover:bg-emerald-50 transition-all flex items-center gap-3">
+                                        قناة التليجرام <Icon name="send" size={20} />
+                                    </a>
+                                </div>
+                            </div>
+
+                            {/* Honors Board */}
+                            <div id="honors" className="bg-emerald-950 p-8 md:p-12 rounded-[60px] shadow-2xl space-y-8 relative overflow-hidden">
+                                <div className="text-center relative z-10">
+                                    <h2 className="text-3xl font-black text-white mb-2 underline decoration-emerald-500">أوائل التميز 2024</h2>
+                                    <p className="text-emerald-400 font-bold text-sm">نفتخر بصناعة المركز الأول على مستوى الجمهورية</p>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                                    <div className="honor-card p-6 rounded-[30px] text-center">
+                                        <div className="w-12 h-12 bg-emerald-900/50 rounded-full flex items-center justify-center mx-auto mb-3"><Icon name="medal" className="text-emerald-400" /></div>
+                                        <p className="text-white font-black text-xs">من أوائل الجمهورية</p>
+                                    </div>
+                                    <div className="honor-card p-6 rounded-[30px] text-center border-amber-500/50 bg-amber-500/5 scale-105">
+                                        <div className="w-12 h-12 bg-amber-900/50 rounded-full flex items-center justify-center mx-auto mb-3"><Icon name="trophy" className="text-amber-500" /></div>
+                                        <p className="text-white font-black text-xs">الأول على الجمهورية</p>
+                                    </div>
+                                    <div className="honor-card p-6 rounded-[30px] text-center">
+                                        <div className="w-12 h-12 bg-emerald-900/50 rounded-full flex items-center justify-center mx-auto mb-3"><Icon name="medal" className="text-emerald-400" /></div>
+                                        <p className="text-white font-black text-xs">من أوائل الجمهورية</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Features Section */}
+                    <section id="features" className="py-24 bg-white">
+                        <div className="container mx-auto px-6">
+                            <div className="text-center mb-16">
+                                <h2 className="text-4xl font-black text-emerald-950">لماذا تختار شركة التميز؟</h2>
+                                <div className="w-16 h-1.5 bg-emerald-600 mx-auto mt-4 rounded-full"></div>
+                            </div>
+                            <div className="grid md:grid-cols-4 gap-8">
+                                {features.map((f, i) => (
+                                    <div key={i} className="p-8 bg-emerald-50/50 rounded-[40px] border border-emerald-100 hover:shadow-xl transition-all group">
+                                        <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-md group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                                            <Icon name={f.icon} size={28} />
+                                        </div>
+                                        <h3 className="text-xl font-black mb-3 text-emerald-900">{f.title}</h3>
+                                        <p className="text-sm font-bold text-emerald-700/70 leading-relaxed">{f.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* CV / About Section */}
+                    <section id="cv" className="py-24 bg-emerald-950 text-white rounded-[100px] mx-4">
+                        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-20 items-center">
+                            <div className="space-y-8">
+                                <div className="space-y-2">
+                                    <h2 className="text-4xl font-black italic">مستر / <span className="text-emerald-400">محمد عاطف</span></h2>
+                                    <p className="text-xl font-bold text-emerald-200 uppercase tracking-widest">خبير اللغة الإنجليزية بالأزهر الشريف</p>
+                                </div>
+                                <div className="space-y-6 text-emerald-100/80 font-bold leading-relaxed">
+                                    <div className="flex gap-4 p-6 bg-white/5 rounded-3xl border border-white/10 italic">
+                                        <Icon name="quote" className="text-emerald-500 shrink-0" />
+                                        <p>"أكثر من 20 عاماً في تطوير مهارات الطلاب وتأسيسهم في قواعد اللغة الإنجليزية بأرقى المعايير التعليمية."</p>
+                                    </div>
+                                    <ul className="space-y-4">
+                                        <li className="flex items-center gap-3"><Icon name="check-circle" className="text-emerald-500" size={18}/> معلم أول اللغة الإنجليزية بقطاع المعاهد الأزهرية بالقاهرة.</li>
+                                        <li className="flex items-center gap-3"><Icon name="check-circle" className="text-emerald-500" size={18}/> محاضر معتمد ومدرب تربوي لنظام التعليم الجديد.</li>
+                                        <li className="flex items-center gap-3"><Icon name="check-circle" className="text-emerald-500" size={18}/> مشرف مبادرة "معاً نتعلم" لدعم الطلاب على مستوى الجمهورية.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="relative group">
+                                <div className="aspect-[4/5] bg-emerald-900 rounded-[80px] overflow-hidden border-8 border-white/5 shadow-2xl relative z-10">
+                                    <img src="https://images.unsplash.com/photo-1544717297-fa154da09f5b?auto=format&fit=crop&q=80&w=800" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" alt="Mr. Mohamed Atef" />
+                                </div>
+                                <div className="absolute -bottom-10 -right-10 w-full h-full border-2 border-emerald-500 rounded-[80px] -z-0 translate-x-4 translate-y-4"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Social Media Grid */}
+                    <section className="py-24 bg-white">
+                        <div className="container mx-auto px-6">
+                            <div className="text-center mb-16">
+                                <h2 className="text-3xl font-black text-emerald-950 italic">تابعنا على منصات التواصل</h2>
+                                <p className="text-emerald-500 font-bold mt-2">كن أول من يعرف الأخبار والمراجعات</p>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                                <a href="http://www.youtube.com/@mohammedattee" target="_blank" className="social-btn flex flex-col items-center gap-4 p-8 bg-red-50 rounded-[40px] border border-red-100 group">
+                                    <Icon name="youtube" size={40} className="text-red-600" />
+                                    <span className="font-black text-red-900">يوتيوب</span>
+                                </a>
+                                <a href="https://facebook.com/مستر-محمد-عاطف-101592818536933" target="_blank" className="social-btn flex flex-col items-center gap-4 p-8 bg-blue-50 rounded-[40px] border border-blue-100 group">
+                                    <Icon name="facebook" size={40} className="text-blue-600" />
+                                    <span className="font-black text-blue-900">فيسبوك</span>
+                                </a>
+                                <a href="https://instagram.com/mstrmhmdtf" target="_blank" className="social-btn flex flex-col items-center gap-4 p-8 bg-pink-50 rounded-[40px] border border-pink-100 group">
+                                    <Icon name="instagram" size={40} className="text-pink-600" />
+                                    <span className="font-black text-pink-900">إنستجرام</span>
+                                </a>
+                                <a href="https://t.me/MOHAMEDATEF2022" target="_blank" className="social-btn flex flex-col items-center gap-4 p-8 bg-sky-50 rounded-[40px] border border-sky-100 group">
+                                    <Icon name="send" size={40} className="text-sky-600" />
+                                    <span className="font-black text-sky-900">تليجرام</span>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="bg-emerald-950 text-white py-20 px-6 mt-24">
+                        <div className="container mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-12 text-center md:text-right">
+                            <div className="space-y-6">
+                                <div className="flex items-center justify-center md:justify-start gap-3">
+                                    <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center font-black text-white">MA</div>
+                                    <span className="text-xl font-black italic tracking-tight">شركة التميز التعليمية</span>
+                                </div>
+                                <p className="text-emerald-200/60 font-bold text-xs leading-relaxed italic">نحن نبني جيلاً مثقفاً متمكناً من لغته، فخوراً بأزهره الشريف.</p>
+                            </div>
+                            <div>
+                                <h4 className="font-black text-emerald-400 mb-6 uppercase text-xs tracking-widest">الدعم الفني</h4>
+                                <ul className="space-y-4 text-sm font-bold">
+                                    <li>
+                                        <a href="https://t.me/MOHAMEDATEF2022" target="_blank" className="flex items-center justify-center md:justify-start gap-3 bg-white/10 p-3 rounded-xl hover:bg-emerald-600 transition-all border border-white/5">
+                                            <Icon name="send" size={18} /> تواصل عبر تليجرام
+                                        </a>
+                                    </li>
+                                    <li className="flex items-center justify-center md:justify-start gap-2 pt-2 text-emerald-300">
+                                        <Icon name="phone" size={14}/> 01010056086
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className="lg:col-span-2">
+                                <div className="bg-white/5 p-8 rounded-[40px] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+                                    <div className="text-center md:text-right">
+                                        <h4 className="font-black text-xl mb-1">انضم الآن للمنصة</h4>
+                                        <p className="text-sm font-bold text-emerald-400 italic">ابدأ رحلة التعلم مع أقوى نموذج تعليمي</p>
+                                    </div>
+                                    <button onClick={() => { setCurrentPage('auth'); setAuthTab('register'); }} className="bg-white text-emerald-900 px-8 py-4 rounded-2xl font-black shadow-lg hover:bg-emerald-50 transition-all flex items-center gap-2">
+                                        انشاء حساب طالب <Icon name="user-plus" size={20} />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="container mx-auto mt-16 pt-8 border-t border-white/5 text-center text-[10px] font-bold text-emerald-500/50">
+                            &copy; 2024 جميع الحقوق محفوظة لشركة التميز التعليمية - مستر محمد عاطف
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
